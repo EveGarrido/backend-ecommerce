@@ -39,7 +39,7 @@ const router = Router();
  *                   type: string
  *                   example: Error
  * /api/v1/order/{id}:
- *   get:
+ *   put:
  *     security:
  *     - bearerAuth: []
  *     summary: Pay Order

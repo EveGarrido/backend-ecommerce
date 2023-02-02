@@ -14,7 +14,7 @@ const addProductToCart = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
     const productToAdd = await ProductServices.getById(productId);
-    const priceUnitProduct = productToAdd.price;
+    const priceUnitProduct = productToAdd[0].price;
     const productInCart = await ProductsInCartServices.add(
       userId,
       productId,

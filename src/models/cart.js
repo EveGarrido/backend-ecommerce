@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
  *     addproduct:
  *       type: object
  *       properties:
- *         cartId:
+ *         userId:
  *           type: int
  *           example: 1 
  *         productId:
@@ -19,9 +19,6 @@ module.exports = (sequelize, DataTypes) => {
  *         quantity:
  *           type: int
  *           example: 3
- *         price:
- *           type: int
- *           example: 1
  */
 
 class cart extends Sequelize.Model {
