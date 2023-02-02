@@ -1,10 +1,10 @@
 const DataTypes = require("sequelize").DataTypes;
+const _users = require("./users");
 const _cart = require("./cart");
 const _orders = require("./orders");
 const _product = require("./product");
 const _product_in_cart = require("./product_in_cart");
 const _product_in_order = require("./product_in_order");
-const _users = require("./users");
 
 function initModels(sequelize) {
   const users = _users(sequelize, DataTypes);
