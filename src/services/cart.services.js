@@ -12,7 +12,10 @@ class CartServices {
 
   static async updateCart(cartId, totalPriceCart){
     try {
-      const field = { total_price: totalPriceCart};
+      const field = { 
+        total_price: totalPriceCart,
+        status: "pending"
+       };
       const result = await models.cart.update(field, { where: {id: cartId} });
       return result;
     } catch (error) {
@@ -20,8 +23,12 @@ class CartServices {
     }
   }
 
-  static async updateCart(field, id){
+  static async emptyCart(id){
     try {
+      const field = { 
+        status: "completed",
+        total_price: 0
+      }
       const result = await models.cart.update(field, { where: { id } });
       return result;
     } catch (error) {

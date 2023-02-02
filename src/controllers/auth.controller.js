@@ -1,5 +1,6 @@
 const AuthServices = require('../services/auth.services');
 const CartServices = require('../services/cart.services');
+const { use } = require('../utils/mailer');
 const transporter = require('../utils/mailer');
 
 
@@ -12,7 +13,7 @@ const register = async (req, res) =>{
       await CartServices.createCart(id);
       res.status(201).json({message: 'User created'});
       await transporter.sendMail({
-        to: result.email,
+        to: userCreated.email,
         from: "evelyn.harleth.gl@gmail.com", 
         subjetc: "Email confirmation",
         html: "<h1>Welcome to the Store</h1> <p>Please, confirm your email in the following link </p><p> <a href='#'' target='new_blank'>Click me</a>",

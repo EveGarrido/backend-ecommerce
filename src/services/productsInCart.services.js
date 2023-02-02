@@ -1,12 +1,11 @@
 const models = require("../models");
-const { Op } = require("sequelize");
 
 class ProductsInCartServices {
-  static async add(cartId, ProductId, quantity, price) {
+  static async add(cartId, productId, quantity, price) {
     try {
       const result = await models.product_in_cart.create({
         cart_id: cartId,
-        product_id: ProductId,
+        product_id: productId,
         quantity: quantity,
         price: price,
       });
@@ -20,12 +19,14 @@ class ProductsInCartServices {
     try {
       const result = await models.users.findOne({
         where: { id },
+        attributes: ['username'],
         include: {
           model: models.cart,
           as: "carts",
-          status: {
-            [Op.like]: "%completed%",
+          where: {
+            status: "pending"
           },
+          attributes: ['status'],
           include: {
             model: models.product_in_cart,
             as: "product_in_carts",

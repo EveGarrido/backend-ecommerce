@@ -9,7 +9,7 @@ class UserServices {
           exclude: ["password"]
         },
         include: {
-          model: models.order,
+          model: models.orders,
           as: 'orders'
         }
       });

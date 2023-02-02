@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return order.init(sequelize, DataTypes);
+  return orders.init(sequelize, DataTypes);
 }
 
-class order extends Sequelize.Model {
+class orders extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   return super.init({
     id: {
@@ -32,12 +32,12 @@ class order extends Sequelize.Model {
     }
   }, {
     sequelize,
-    tableName: 'order',
+    tableName: 'orders',
     schema: 'public',
     timestamps: false,
     indexes: [
       {
-        name: "order_pkey",
+        name: "orders_pkey",
         unique: true,
         fields: [
           { name: "id" },

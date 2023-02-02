@@ -10,7 +10,7 @@ const createProduct = async (req, res)=>{
    res.status(400).json(error.message);
  }
 };
-
+//revisar
 const getAllProductsAvailable = async (req, res)=>{
    try {
     const result = await ProductServices.getProducts();

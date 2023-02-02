@@ -8,13 +8,14 @@ const transporter = require('../utils/mailer');
 
 const addProductToCart = async (req, res)=>{
   try {
-    const { cartId, ProductId, quantity, price } = req.body;
-    if(!cartId || !ProductId || !quantity || !price){
+    const { cartId, productId, quantity, price } = req.body;
+    if(!cartId || !productId || !quantity || !price){
       return res.status(400).json({message: 'Missing required fields'})
     }
-    const productInCart = await ProductsInCartServices.add(cartId, ProductId, quantity, price);
+    const productInCart = await ProductsInCartServices.add(cartId, productId, quantity, price);
     if(productInCart){
       const totalPriceCart = await models.product_in_cart.sum('price', { where: { cart_id: cartId } });
+      console.log(totalPriceCart);
       await CartServices.updateCart(cartId, totalPriceCart);
       res.status(201).json({message: 'Product add to cart'});
     }
@@ -39,9 +40,9 @@ const buyCart = async (req, res)=>{
       const { cart_id, product_id, quantity, price } = product.dataValues;
       await ProductsInOrderServices.create(orderId, cart_id, product_id, quantity, price); 
     });
-//verificar condición if
+// verificar condición if
     if(newOrder){
-      await CartServices.updateCart(field, id);
+      await CartServices.emptyCart(id);
       await ProductsInCartServices.delete(id);
 
       const buyer = await UserServices.getById(user_id);
@@ -53,7 +54,7 @@ const buyCart = async (req, res)=>{
         html: "<h1>Thank for your purchase</h1>",
       });
 
-      res.status(201).json({message: 'Cart bought'})
+      res.status(200).json({message: 'Cart bought'})
     }
   } catch (error) {
     res.status(400).json(error.message);

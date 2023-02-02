@@ -17,7 +17,7 @@ class product_in_order extends Sequelize.Model {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'order',
+        model: 'orders',
         key: 'id'
       }
     },

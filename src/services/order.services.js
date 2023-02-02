@@ -3,7 +3,7 @@ const models = require('../models');
 class OrderServices {
   static async create(user_id, total_price){
     try {
-      const result = await models.order.create({
+      const result = await models.orders.create({
         user_id: user_id, 
         total_price: total_price
       });
@@ -15,7 +15,7 @@ class OrderServices {
 
   static async getAll(){
     try {
-      const result = await models.order.findAll();
+      const result = await models.orders.findAll();
       return result;
     } catch (error) {
       throw error;
