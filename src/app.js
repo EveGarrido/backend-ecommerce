@@ -19,9 +19,9 @@ app.use(morgan('tiny'));
 //   .then(()=>console.log('Base de datos autenticada'))
 //   .catch((error)=>console.log(error));
 
-// db.sync({force: false})
-//   .then(()=> console.log('Base de datos sincronizada'))
-//   .catch((error)=> console.log(error));
+db.sync({force: false})
+  .then(()=> console.log('Base de datos sincronizada'))
+  .catch((error)=> console.log(error));
 
 app.get('/', (req, res)=>{
   res.json({message: 'Welcome to my server'});
