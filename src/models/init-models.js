@@ -30,12 +30,12 @@ function initModels(sequelize) {
   users.hasMany(product, { as: "products", foreignKey: "user_id"});
 
   return {
+    users,
     cart,
     orders,
     product,
     product_in_cart,
     product_in_order,
-    users,
   };
 }
 module.exports = initModels;

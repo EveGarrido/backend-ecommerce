@@ -30,11 +30,11 @@ class ProductServices {
             [Op.gt]: 0,
           },
         },
-        include: {
-          model: models.users,
-          as: "user",
-          attributes: ["username"],
-        },
+        // include: {
+        //   model: models.users,
+        //   as: "user",
+        //   attributes: ["username"],
+        // },
       });
       return result;
     } catch (error) {

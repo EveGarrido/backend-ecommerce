@@ -4,6 +4,7 @@ const {
   getAllProductsAvailable,
   getProductInCartbyIdUser
 } = require('../controllers/product.controller');
+const authMiddleware = require('../middlewares/auth.middlelware');
 
 const router = Router();
 
@@ -11,6 +12,8 @@ const router = Router();
  * @openapi
  * /api/v1/product/create:
  *   post:
+ *     security:
+ *     - bearerAuth: []
  *     summary: create a new product
  *     tags:
  *       - Product
@@ -27,12 +30,21 @@ const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *             type: object
- *             properties:
- *               type: string
- *               example: product created
+ *               $ref: '#/components/schema/newproduct'
+ *       400:
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Not created
  * /api/v1/product/available:
  *   get:
+ *     security:
+ *     - bearerAuth: []
  *     summary: get product available
  *     tags:
  *       - Product
@@ -42,14 +54,19 @@ const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *             type: object
- *             properties:
- *                 status:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schema/product1'
+ *       400:
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
  *                   type: string
- *                   example: Ok
- *                 data:
- *                   type: array
- *                   items: {}
+ *                   example: Not found
  * /api/v1/product/{id}:
  *   get:
  *     security:
@@ -73,16 +90,33 @@ const router = Router();
  *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 username:
  *                   type: string
- *                   example: Ok
- *                 data:
+ *                   example: Florencia
+ *                 cart:
  *                   type: array
- *                   items: {}
+ *                   items:
+ *                     properties:
+ *                       id:
+ *                         type: int
+ *                         example: 1
+ *                       product_in_cart:
+ *                         type: array
+ *                         items: {}
+ *       400:
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error
  */
 
-router.post('/create', createProduct);
-router.get('/available', getAllProductsAvailable);
-router.get('/:id', getProductInCartbyIdUser);
+router.post('/create',authMiddleware, createProduct);
+router.get('/available',authMiddleware, getAllProductsAvailable);
+router.get('/:id',authMiddleware, getProductInCartbyIdUser);
 
 module.exports = router;

@@ -20,7 +20,7 @@ const router = Router();
  *             $ref: '#/components/schema/register'
  *     responses:
  *       201:
- *         description: Created
+ *         description: User Created
  *         content:
  *           application/json:
  *             schema:
@@ -28,10 +28,20 @@ const router = Router();
  *               properties:
  *                 message:
  *                   type: string
- *                   example: user created
+ *                   example: User created
+ *       400:
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Something wrong
  * /api/v1/auth/login:
  *   post:
- *     summary: login user
+ *     summary: Login an existing user into the app
  *     tags:
  *       - Auth
  *     requestBody:
@@ -61,6 +71,6 @@ const router = Router();
  */
 
 router.post('/register', register);
-router.post('/login',authMiddleware, login);
+router.post('/login', login);
 
 module.exports = router;

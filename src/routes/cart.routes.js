@@ -3,6 +3,7 @@ const {
   addProductToCart,
   buyCart
 } = require('../controllers/cart.controller');
+const authMiddleware = require('../middlewares/auth.middlelware');
 
 const router = Router();
 
@@ -10,6 +11,8 @@ const router = Router();
  * @openapi
  * /api/v1/cart/add:
  *   post:
+ *     security:
+ *     - bearerAuth: []
  *     summary: Add product to cart
  *     tags:
  *       - Cart
@@ -22,14 +25,25 @@ const router = Router();
  *             $ref: '#/components/schema/addproduct'
  *     responses:
  *       201:
- *         description: Added Product
+ *         description: Add product
  *         content:
  *           application/json:
  *             schema:
- *             type: object
- *             properties:
- *               type: string
- *               example: product add
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product add to cart
+ *       400:
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error
  * /api/v1/cart/{id}:
  *   put:
  *     security:
@@ -56,9 +70,19 @@ const router = Router();
  *                 message:
  *                   type: string
  *                   example: cart bought
+ *       400:
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error
  */
 
-router.post('/add', addProductToCart);
-router.put('/:id', buyCart);
+router.post('/add',authMiddleware, addProductToCart);
+router.put('/:id',authMiddleware, buyCart);
 
 module.exports = router;

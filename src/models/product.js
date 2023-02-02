@@ -25,6 +25,30 @@ module.exports = (sequelize, DataTypes) => {
  *         image:
  *           type: string
  *           example: https://solosurf.cl/wp-content/uploads/2018/06/ND-Kayu.jpg
+ *     product1:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: Bicicleta
+ *         price:
+ *           type: int
+ *           example: 100
+ *         availableQty:
+ *           type: int
+ *           example: 50
+ *         status:
+ *           type: string
+ *           example: available
+ *         user_id:
+ *           type: int
+ *           example: 1
+ *         image:
+ *           type: string
+ *           example: https://bici.cl/wp-content/uploads/2018/06/ND-Kayu.jpg
  */
 
 class product extends Sequelize.Model {

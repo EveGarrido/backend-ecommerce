@@ -26,7 +26,7 @@ class ProductsInCartServices {
           where: {
             status: "pending"
           },
-          attributes: ['status'],
+          attributes: ['id'],
           include: {
             model: models.product_in_cart,
             as: "product_in_carts",
