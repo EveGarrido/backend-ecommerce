@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const {getAllOrders} = require('../controllers/order.controller');
+const {getAllOrders, payOrder} = require('../controllers/order.controller');
 const {getUserWithOrders} = require('../controllers/users.controller');
 
 const router = Router();
@@ -34,6 +34,7 @@ const router = Router();
  */
 
 router.get('/', getAllOrders);
+router.put('/:id', payOrder);
 router.get('/user/:id', getUserWithOrders);
 
 

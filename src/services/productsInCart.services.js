@@ -1,13 +1,13 @@
 const models = require("../models");
 
 class ProductsInCartServices {
-  static async add(cartId, productId, quantity, price) {
+  static async add(userId, productId, quantity, priceUnitProduct) {
     try {
       const result = await models.product_in_cart.create({
-        cart_id: cartId,
+        cart_id: userId,
         product_id: productId,
         quantity: quantity,
-        price: price,
+        price: quantity * priceUnitProduct,
       });
       return result;
     } catch (error) {

@@ -10,13 +10,13 @@ class CartServices {
     }
   }
 
-  static async updateCart(cartId, totalPriceCart){
+  static async updateCart(userId, totalPriceCart){
     try {
       const field = { 
         total_price: totalPriceCart,
         status: "pending"
        };
-      const result = await models.cart.update(field, { where: {id: cartId} });
+      const result = await models.cart.update(field, { where: {id: userId} });
       return result;
     } catch (error) {
       throw error;

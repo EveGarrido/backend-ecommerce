@@ -21,6 +21,15 @@ class OrderServices {
       throw error;
     }
   }
+
+  static async update(id){
+    try {
+      const result = await models.orders.update({ status: 'purchased'}, {where: {id}});
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 module.exports = OrderServices;

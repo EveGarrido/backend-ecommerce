@@ -1,4 +1,6 @@
 const OrderServices = require('../services/order.services');
+const ProductServices = require('../services/product.services');
+const ProductInOrderServices = require('../services/productInOrder.service');
 
 const createOrder = async (req, res)=>{
   try {
@@ -19,9 +21,30 @@ const getAllOrders = async (req, res)=>{
   }
 }
 
+const payOrder = async (req, res)=>{
+  try {
+    const { id } = req.params;
+    await OrderServices.update(id);
+    const productsInOrder = await ProductInOrderServices.getById(id);
+
+    productsInOrder.forEach(async (product) => {
+      const { quantity, product_id } = product.dataValues;
+      const productForModified = await ProductServices.getById(product_id);
+      const quantityAvailable = productForModified[0].dataValues.availableQty;
+      const x = await ProductServices.updateQuantity(quantity, product_id, quantityAvailable);
+    });
+    await ProductInOrderServices.update(id);
+    res.status(200).json({message: 'Order Paid'});
+
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+}
+
 module.exports = {
   createOrder,
-  getAllOrders
+  getAllOrders,
+  payOrder
 };
 
 //revisar ruta de ejecución

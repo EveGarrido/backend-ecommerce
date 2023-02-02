@@ -1,47 +1,58 @@
-const models = require('../models');
-const CartServices = require('../services/cart.services');
-const OrderServices = require('../services/order.services');
-const ProductsInCartServices = require('../services/productsInCart.services');
-const UserServices = require('../services/users.services');
-const ProductsInOrderServices = require('../services/productInOrder.service');
-const transporter = require('../utils/mailer');
+const models = require("../models");
+const CartServices = require("../services/cart.services");
+const OrderServices = require("../services/order.services");
+const ProductsInCartServices = require("../services/productsInCart.services");
+const UserServices = require("../services/users.services");
+const ProductsInOrderServices = require("../services/productInOrder.service");
+const transporter = require("../utils/mailer");
+const ProductServices = require("../services/product.services");
 
-const addProductToCart = async (req, res)=>{
+const addProductToCart = async (req, res) => {
   try {
-    const { cartId, productId, quantity, price } = req.body;
-    if(!cartId || !productId || !quantity || !price){
-      return res.status(400).json({message: 'Missing required fields'})
+    const { userId, productId, quantity } = req.body;
+    if (!userId || !productId || !quantity) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
-    const productInCart = await ProductsInCartServices.add(cartId, productId, quantity, price);
-    if(productInCart){
-      const totalPriceCart = await models.product_in_cart.sum('price', { where: { cart_id: cartId } });
-      console.log(totalPriceCart);
-      await CartServices.updateCart(cartId, totalPriceCart);
-      res.status(201).json({message: 'Product add to cart'});
+    const productToAdd = await ProductServices.getById(productId);
+    const priceUnitProduct = productToAdd.price;
+    const productInCart = await ProductsInCartServices.add(
+      userId,
+      productId,
+      quantity,
+      priceUnitProduct
+    );
+    if (productInCart) {
+      const totalPriceCart = await models.product_in_cart.sum("price", {where: { cart_id: userId },});
+      await CartServices.updateCart(userId, totalPriceCart);
+      res.status(201).json({ message: "Product add to cart" });
     }
   } catch (error) {
     res.status(400).json(error);
   }
 };
 
-const buyCart = async (req, res)=>{
+const buyCart = async (req, res) => {
   try {
     const { id } = req.params;
-    const field = req.body;
 
     const cart = await CartServices.getCartById(id);
     const { user_id, total_price } = cart.dataValues;
     const newOrder = await OrderServices.create(user_id, total_price);
     const orderId = newOrder.dataValues.id;
-
     const productInCart = await ProductsInCartServices.getByCartId(id);
-    
-    productInCart.forEach(async (product)=>{
+
+    productInCart.forEach(async (product) => {
       const { cart_id, product_id, quantity, price } = product.dataValues;
-      await ProductsInOrderServices.create(orderId, cart_id, product_id, quantity, price); 
+      await ProductsInOrderServices.create(
+        orderId,
+        cart_id,
+        product_id,
+        quantity,
+        price
+      );
     });
-// verificar condición if
-    if(newOrder){
+    // verificar condición if
+    if (newOrder) {
       await CartServices.emptyCart(id);
       await ProductsInCartServices.delete(id);
 
@@ -49,19 +60,19 @@ const buyCart = async (req, res)=>{
       const { email } = buyer.dataValues;
       await transporter.sendMail({
         to: email,
-        from: "evelyn.harleth.gl@gmail.com", 
+        from: "evelyn.harleth.gl@gmail.com",
         subjetc: "Email confirmation purchase",
         html: "<h1>Thank for your purchase</h1>",
       });
 
-      res.status(200).json({message: 'Cart bought'})
+      res.status(200).json({ message: "Cart bought" });
     }
   } catch (error) {
     res.status(400).json(error.message);
   }
-}
+};
 
 module.exports = {
   addProductToCart,
-  buyCart
+  buyCart,
 };
